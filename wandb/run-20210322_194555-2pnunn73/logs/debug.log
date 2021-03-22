@@ -1,0 +1,42 @@
+2021-03-22 19:45:55,283 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting env: {}
+2021-03-22 19:45:55,284 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-03-22 19:45:55,284 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-03-22 19:45:55,284 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-03-22 19:45:55,284 INFO    MainThread:14908 [wandb_init.py:_log_setup():336] Logging user logs to C:\Users\mm16jdc\Documents\CEDA_satellites\leewave_segmentation\wandb\run-20210322_194555-2pnunn73\logs\debug.log
+2021-03-22 19:45:55,284 INFO    MainThread:14908 [wandb_init.py:_log_setup():337] Logging internal logs to C:\Users\mm16jdc\Documents\CEDA_satellites\leewave_segmentation\wandb\run-20210322_194555-2pnunn73\logs\debug-internal.log
+2021-03-22 19:45:55,285 INFO    MainThread:14908 [wandb_init.py:_jupyter_setup():287] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x000001C88EE9AA88>
+2021-03-22 19:45:55,285 INFO    MainThread:14908 [wandb_init.py:init():369] calling init triggers
+2021-03-22 19:45:55,285 INFO    MainThread:14908 [wandb_init.py:init():376] wandb.init called with sweep_config: {}
+config: {}
+2021-03-22 19:45:55,285 INFO    MainThread:14908 [wandb_init.py:init():418] starting backend
+2021-03-22 19:45:55,286 INFO    MainThread:14908 [backend.py:_multiprocessing_setup():71] multiprocessing start_methods=spawn, using: spawn
+2021-03-22 19:45:55,291 INFO    MainThread:14908 [backend.py:ensure_launched():123] starting backend process...
+2021-03-22 19:45:55,594 INFO    MainThread:14908 [backend.py:ensure_launched():128] started backend process with pid: 10004
+2021-03-22 19:45:55,595 INFO    MainThread:14908 [wandb_init.py:init():423] backend started and connected
+2021-03-22 19:45:55,605 INFO    MainThread:14908 [wandb_init.py:init():463] updated telemetry
+2021-03-22 19:45:55,606 INFO    MainThread:14908 [wandb_init.py:init():482] communicating current version
+2021-03-22 19:45:59,810 INFO    MainThread:14908 [wandb_init.py:init():487] got version response 
+2021-03-22 19:45:59,810 INFO    MainThread:14908 [wandb_init.py:init():495] communicating run to backend with 30 second timeout
+2021-03-22 19:46:00,124 INFO    MainThread:14908 [wandb_init.py:init():520] starting run threads in backend
+2021-03-22 19:46:00,719 INFO    MainThread:14908 [wandb_run.py:_console_start():1507] atexit reg
+2021-03-22 19:46:00,721 INFO    MainThread:14908 [wandb_run.py:_redirect():1370] redirect: SettingsConsole.WRAP
+2021-03-22 19:46:00,721 INFO    MainThread:14908 [wandb_run.py:_redirect():1405] Wrapping output streams.
+2021-03-22 19:46:00,721 INFO    MainThread:14908 [wandb_run.py:_redirect():1421] Redirects installed.
+2021-03-22 19:46:00,721 INFO    MainThread:14908 [wandb_init.py:init():544] run started, returning control to user process
+2021-03-22 19:46:00,725 INFO    MainThread:14908 [wandb_init.py:_pause_backend():249] pausing backend
+2021-03-22 19:46:00,726 INFO    MainThread:14908 [jupyter.py:save_ipynb():265] not saving jupyter notebook
+2021-03-22 19:51:11,074 INFO    MainThread:14908 [wandb_init.py:_resume_backend():258] resuming backend
+2021-03-22 19:51:11,075 INFO    MainThread:14908 [wandb_init.py:_pause_backend():249] pausing backend
+2021-03-22 19:51:11,076 INFO    MainThread:14908 [jupyter.py:save_ipynb():265] not saving jupyter notebook
+2021-03-22 19:51:11,082 INFO    MainThread:14908 [wandb_init.py:_resume_backend():258] resuming backend
+2021-03-22 19:51:11,122 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting env: {}
+2021-03-22 19:51:11,123 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-03-22 19:51:11,123 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-03-22 19:51:11,123 INFO    MainThread:14908 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-03-22 19:51:11,124 INFO    MainThread:14908 [wandb_init.py:_log_setup():336] Logging user logs to C:\Users\mm16jdc\Documents\CEDA_satellites\leewave_segmentation\wandb\run-20210322_195111-3ee951d3\logs\debug.log
+2021-03-22 19:51:11,124 INFO    MainThread:14908 [wandb_init.py:_log_setup():337] Logging internal logs to C:\Users\mm16jdc\Documents\CEDA_satellites\leewave_segmentation\wandb\run-20210322_195111-3ee951d3\logs\debug-internal.log
+2021-03-22 19:51:11,127 INFO    MainThread:14908 [wandb_init.py:init():369] calling init triggers
+2021-03-22 19:51:11,128 INFO    MainThread:14908 [wandb_init.py:init():376] wandb.init called with sweep_config: {}
+config: {}
+2021-03-22 19:51:11,128 INFO    MainThread:14908 [wandb_init.py:init():391] re-initializing run, found existing run on stack: 2pnunn73
+2021-03-22 19:51:11,130 INFO    MainThread:14908 [wandb_run.py:finish():1166] finishing run jdconey/lee_seg/2pnunn73

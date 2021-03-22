@@ -1,0 +1,24 @@
+{
+    "os": "Windows-10-10.0.17763-SP0",
+    "python": "3.8.5",
+    "heartbeatAt": "2021-03-19T15:13:30.586524",
+    "startedAt": "2021-03-19T15:13:15.223577",
+    "docker": null,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "-f",
+        "C:\\Users\\mm16jdc\\AppData\\Roaming\\jupyter\\runtime\\kernel-ba50f94b-d0ba-46de-9dcb-f0cec5e75ee6.json"
+    ],
+    "state": "running",
+    "program": "Documents/CEDA_satellites/leewave_segmentation/Untitled.ipynb",
+    "root": "C:/Users/mm16jdc/Documents/CEDA_satellites/leewave_segmentation",
+    "git": {
+        "remote": "git@github.com:jdconey/leewave_segmentation.git",
+        "commit": "4580aca4a188711eb84aff8693343d0884124afc"
+    },
+    "email": "60184850+jdconey@users.noreply.github.com",
+    "host": "UOL-LAP-591765",
+    "username": "mm16jdc",
+    "executable": "C:\\ProgramData\\Anaconda3\\envs\\fastai\\python.exe"
+}

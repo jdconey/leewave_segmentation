@@ -19,14 +19,10 @@ import pytorch_lightning as pl
 import random
 import cv2
 from PIL import Image
+from torchsummary import summary
 
 train_base = 'C:/Users/mm16jdc/Documents/CEDA_satellites/pytorch_mask_test/images_2/train/'
 val_base = 'C:/Users/mm16jdc/Documents/CEDA_satellites/pytorch_mask_test/images_2/valid/'
-#images = os.listdir(base+'images')
-#masks = os.listdir(base+'masks')
-
-
-
 
 
     ######################################
@@ -95,7 +91,7 @@ train_loader = DataLoader(
     train_set,
     batch_size=1,
     shuffle=True,
-    num_workers=2,
+    num_workers=0,
 )
 
 test_loader = torch.utils.data.DataLoader(
@@ -106,27 +102,26 @@ test_loader = torch.utils.data.DataLoader(
 )
 
 net = nn.Sequential(
-    nn.Conv2d(1,16, kernel_size=5, padding=1),
-    nn.ReLU(),
-    nn.MaxPool2d(2, stride=2),
-    nn.Conv2d(16,32, kernel_size=5, padding=0,),
-    nn.ReLU(),
-    nn.MaxPool2d(2, stride=2),
+    nn.Conv2d(1,1, kernel_size=5, padding=0),
+#    nn.ReLU(),
+#    nn.MaxPool2d(2, stride=2),
+#    nn.Conv2d(16,32, kernel_size=5, padding=0,),
+#    nn.ReLU(),
+#    nn.MaxPool2d(2, stride=2),
     
     # complete the rows of this specificaton here
-    
-    nn.Flatten(),    # convert from 2-D feature map and channels to a 1-D vector (within minibatch)
-    nn.Linear(301088, 10000),    # replace the empty argument with the size of the 1-D vector
-   # nn.ReLU(),
-    #nn.Linear(128,1600)
+ #   nn.Conv2d(32,2,kernel_size=5,padding=0),
+   # nn.Flatten(),    # convert from 2-D feature map and channels to a 1-D vector (within minibatch)
+   # nn.Linear(301088, 10000),    # replace the empty argument with the size of the 1-D vector
+  #  nn.ReLU(),
+  #  nn.Linear(93,400)
 )
+print(summary(net, input_size=(1,400,400)))
 
 #for param in net.parameters():
 #    print(param.shape)
 
-print('hello!')
-
-net = UNet(dimensions=1)
+#net = UNet(dimensions=1)
 optimizer = optim.RMSprop(net.parameters(), lr=0.0001, weight_decay=1e-8, momentum=0.9)
 criterion = nn.CrossEntropyLoss()
 epoch_number=10
@@ -144,7 +139,7 @@ for epoch in range(epoch_number):  # loop over the dataset multiple times
 
         # Forward, backward, and update parameters
         outputs = net(inputs)
-        loss = criterion(outputs, labels.squeeze(1))
+        loss = criterion(outputs.squeeze(1), labels.squeeze(1))
         loss.backward()
         optimizer.step()
         # accumulate loss
