@@ -56,3 +56,14 @@ config: {}
 2021-03-22 20:16:32,831 INFO    MainThread:11632 [jupyter.py:save_ipynb():265] not saving jupyter notebook
 2021-03-22 20:16:32,838 INFO    MainThread:11632 [wandb_init.py:_resume_backend():258] resuming backend
 2021-03-22 20:16:32,885 INFO    MainThread:11632 [wandb_watch.py:watch():39] Watching
+2021-03-22 20:56:21,296 INFO    MainThread:11632 [wandb_init.py:_pause_backend():249] pausing backend
+2021-03-22 20:56:21,296 INFO    MainThread:11632 [jupyter.py:save_ipynb():265] not saving jupyter notebook
+2021-03-22 22:07:32,738 INFO    MainThread:11632 [wandb_init.py:_resume_backend():258] resuming backend
+2021-03-22 22:07:32,745 INFO    MainThread:11632 [wandb_init.py:_pause_backend():249] pausing backend
+2021-03-22 22:07:32,745 INFO    MainThread:11632 [jupyter.py:save_ipynb():265] not saving jupyter notebook
+2021-03-22 22:07:37,068 INFO    MainThread:11632 [wandb_init.py:_resume_backend():258] resuming backend
+2021-03-22 22:07:37,098 INFO    MainThread:11632 [wandb_watch.py:watch():39] Watching
+2021-03-22 22:07:37,187 INFO    MainThread:11632 [wandb_init.py:_pause_backend():249] pausing backend
+2021-03-22 22:07:37,187 INFO    MainThread:11632 [jupyter.py:save_ipynb():265] not saving jupyter notebook
+2021-03-22 22:08:01,285 INFO    MainThread:11632 [wandb_init.py:_resume_backend():258] resuming backend
+2021-03-22 22:08:01,286 INFO    MainThread:11632 [wandb_run.py:finish():1166] finishing run jdconey/lee_seg/irq9wktb
