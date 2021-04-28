@@ -1,3 +1,0 @@
-x = shape: torch.Size([16, 3, 400, 400]); type: torch.float32
-x = min: 0.0; max: 1.0
-y = shape: torch.Size([16, 400, 400]); class: tensor([0, 1]); type: torch.int64
