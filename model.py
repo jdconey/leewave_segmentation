@@ -19,13 +19,15 @@ import albumentations
 from unet2 import UNet
 from trainer import Trainer
 
-
+import wandb
+#wandb.init(project="ukv_leewaves")
 
 root = pathlib.Path('C:/Users/mm16jdc/Documents/ukv_data/data/segmentation_full/')
 xmin=275
 xmax=787
 ymin=250
 ymax=762
+
 
 
 class SegmentationDataSet(data.Dataset):
@@ -162,6 +164,9 @@ criterion = torch.nn.CrossEntropyLoss()
 # optimizer
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 # trainer
+wandb.watch(model, log_freq=100)
+
+
 trainer = Trainer(model=model,
                   device=device,
                   criterion=criterion,
