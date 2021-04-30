@@ -13,24 +13,25 @@ import pickle
 
 EPS = 1e-6
 #slightly modified
-def get_IoU(pred, target, n_classes=2):
-  ious = []
-  pred = pred.view(-1)
-  target = target.view(-1)
-  print(pred.shape)
-  print(target.shape)
+def get_IoU(predo, target, n_classes=2):
+    pred = torch.argmax(predo, dim=1)  # perform argmax to generate 1 channel
+    pred = pred.cpu().numpy()  # send to cpu and transform to numpy.ndarray
+    pred = np.squeeze(pred)  # remove batch dim and channel dim -> [H, W]
+    #pred = torch.from_numpy(pred)
+    #pred = re_normalize(pred)  # scale it to the range [0-255]
+    target = target.cpu().numpy()
+      # pred = pred.view(-1)
+      # target = target.view(-1)
+    #print('pred',pred.shape)
+    #print(target.shape)
+ #   pickle.dump(target,open("target.pkl","wb"))
+ #   pickle.dump(pred,open("pred.pkl","wb"))
+ #   pickle.dump(predo,open("predo.pkl","wb"))
 
-  # Ignore IoU for background class ("0")
-  for cls in range(1, n_classes):  # This goes from 1:n_classes-1 -> class "0" is ignored
-    pred_inds = pred == cls
-    target_inds = target == cls
-    intersection = (pred_inds[target_inds]).long().sum().data.cpu()[0]  # Cast to long to prevent overflows
-    union = pred_inds.long().sum().data.cpu()[0] + target_inds.long().sum().data.cpu()[0] - intersection
-    if union == 0:
-      ious.append(float('nan'))  # If there is no ground truth, do not include in evaluation
-    else:
-      ious.append(float(intersection) / float(max(union, 1)))
-  return np.nanmean(ious)
+    intersection = np.logical_and(target, pred)
+    union = np.logical_or(target, pred)
+    iou_score = np.sum(intersection) / np.sum(union)
+    return np.nanmean(iou_score)
 
 class Trainer:
     def __init__(self,
@@ -108,24 +109,26 @@ class Trainer:
             input, target = x.to(self.device), y.to(self.device)  # send to device (GPU or CPU)
             self.optimizer.zero_grad()  # zerograd the parameters
             out = self.model(input)  # one forward pass
-            loss = self.criterion(out, target)  # calculate loss
+            loss = self.criterion(out,target)
+          #  loss = self.criterion(torch.argmax(out, dim=1), target)  # calculate loss
             loss_value = loss.item()
             train_losses.append(loss_value)
-            print(out.shape,target.shape)
-            pickle.dump(out,open("out.pkl","wb"))
-            pickle.dump(target,open("target.pkl","wb"))
+          #  print(out.shape,target.shape)
+          #  pickle.dump(out,open("out.pkl","wb"))
+          #  pickle.dump(target,open("target.pkl","wb"))
            # print(out.shape)
            # print(target.shape)
-        #    accuracies.append(get_IoU(out,target))
+            #accuracies.append(get_IoU(out,target))
             loss.backward()  # one backward pass
             self.optimizer.step()  # update the parameters
          #   print(accuracies[-1],type(accuracies[-1]))
-            batch_iter.set_description(f'Training: (loss {loss_value:.4f}; accuracy {accuracies[-1]:.4f})')  # update progressbar
+            #batch_iter.set_description(f'Training: (loss {loss_value:.4f}; accuracy {accuracies[-1]:.4f})')  # update progressbar
+            batch_iter.set_description(f'Training: (loss {loss_value:.4f})')  # update progressbar
 
         self.training_loss.append(np.mean(train_losses))
-        self.training_accuracy.append(np.mean(accuracies))
+        #self.training_accuracy.append(1 - np.mean(accuracies))
         wandb.log({"training_loss": self.training_loss[-1]})
-        wandb.log({"training_accuracy": self.training_accuracy[-1]})
+        #wandb.log({"training_accuracy": self.training_accuracy[-1]})
         self.learning_rate.append(self.optimizer.param_groups[0]['lr'])
 
         batch_iter.close()
@@ -139,7 +142,7 @@ class Trainer:
 
         self.model.eval()  # evaluation mode
         valid_losses = []  # accumulate the losses here
-        val_accuracies = []
+      #  val_accuracies = []
         batch_iter = tqdm(enumerate(self.validation_DataLoader), 'Validation', total=len(self.validation_DataLoader),
                           leave=False)
 
@@ -150,19 +153,21 @@ class Trainer:
 
             with torch.no_grad():
                 out = self.model(input)
-                loss = self.criterion(out, target)
+                loss = self.criterion(out,target)
+                #loss = self.criterion(torch.argmax(out, dim=1), target)
                 loss_value = loss.item()
                 valid_losses.append(loss_value)
                 
-      #          val_accuracies.append(get_IoU(out,target))
+                #val_accuracies.append(get_IoU(out,target))
 
-                batch_iter.set_description(f'Validation: (loss {loss_value:.4f}); accuracy {val_accuracies[-1]:.4f})')
+                #batch_iter.set_description(f'Validation: (loss {loss_value:.4f}; accuracy {val_accuracies[-1]:.4f})')
+                batch_iter.set_description(f'Validation: (loss {loss_value:.4f})')
 
         self.validation_loss.append(np.mean(valid_losses))
-        self.validation_accuracy.append(np.mean(val_accuracies))
+    #    self.validation_accuracy.append(np.mean(val_accuracies))
 
         wandb.log({"validation_loss": self.validation_loss[-1]})
-        wandb.log({"validation_accuracy": self.validation_accuracy[-1]})
+      #  wandb.log({"validation_accuracy": self.validation_accuracy[-1]})
 
 
         batch_iter.close()
