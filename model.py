@@ -291,3 +291,13 @@ trainer = Trainer(model=model,
                   notebook=False)
 # start training
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
+
+torch.save({
+            'epoch': 10,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'loss': [training_losses,validation_losses],
+            'lr_rates':lr_rates
+            }, 'model_2021-04-29.pt')
+
+torch.save(model, 'little_model_2021-04-30.pt')
