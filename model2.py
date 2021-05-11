@@ -26,7 +26,7 @@ from trainer import Trainer, get_IoU
 import tqdm
 
 import wandb
-
+import time
 #f = open("/home/home01/mm16jdc/wandb_apikey", "r")
 
 #os.environ["WANDB_API_KEY"] = f.read()
@@ -279,8 +279,17 @@ model = UNet(n_classes=2, padding=True, up_mode='upsample')
 #criterion= IoULoss()
 criterion = CrossEntropy2d()
 # optimizer
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
 # trainer
+
+
+
+#checkpoint = torch.load('/nobackup/mm16jdc/model_2021-04-29.pt')
+#model.load_state_dict(checkpoint['model_state_dict'])
+#optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+#epoch = checkpoint['epoch']
+#loss = checkpoint['loss']
+
 wandb.watch(model, log_freq=100)
 
 
@@ -291,12 +300,12 @@ trainer = Trainer(model=model,
                   training_DataLoader=dataloader_training,
                   validation_DataLoader=dataloader_validation,
                   lr_scheduler=None,
-                  epochs=10,
+                  epochs=20,
                   epoch=0,
                   notebook=False)
 # start training
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
-
+now = time.strftime("%Y-%m-%d_%H", time.gmtime())
 load_path = '/nobackup/mm16jdc/' 
 
 torch.save({
@@ -305,6 +314,6 @@ torch.save({
             'optimizer_state_dict': optimizer.state_dict(),
             'loss': [training_losses,validation_losses],
             'lr_rates':lr_rates
-            }, load_path+'model_2021-04-29.pt')
+            }, load_path+'model_'+now+'.pt')
 
-torch.save(model, load_path+'little_model_2021-04-30.pt')
+torch.save(model, load_path+'little_model_'+now+'.pt')

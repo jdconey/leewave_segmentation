@@ -9,7 +9,7 @@ import torch
 
 import torch.nn.functional as F
 import torch.nn as nn
-
+import torchgeometry as tgm
 
 from torch.utils import data
 import xarray
@@ -26,19 +26,44 @@ from trainer import Trainer, get_IoU
 import tqdm
 
 import wandb
-
+import time
 #f = open("/home/home01/mm16jdc/wandb_apikey", "r")
 
 #os.environ["WANDB_API_KEY"] = f.read()
 
-wandb.init(project="ukv_leewaves")
+wandb.init(project="ukv_leewaves_dice_gpu")
 
-root = pathlib.Path('/nobackup/mm16jdc/leewave_segmentation/segmentation_data/')
-xmin=275
-xmax=787
-ymin=250
-ymax=762
+root = pathlib.Path('/nobackup/mm16jdc/leewave_segmentation/new_data/sorted/')
+xmin=0#275
+xmax=512#787
+ymin=0#250
+ymax=512#762
 
+def diceCoeff(pred, gt, smooth=1e-5, activation='sigmoid'):
+    r""" computational formula：
+        dice = (2 * (pred ∩ gt)) / (pred ∪ gt)
+    """
+ 
+    if activation is None or activation == "none":
+        activation_fn = lambda x: x
+    elif activation == "sigmoid":
+        activation_fn = nn.Sigmoid()
+    elif activation == "softmax2d":
+        activation_fn = nn.Softmax2d()
+    else:
+                 raise NotImplementedError("Activation implemented for sigmoid and softmax2d activation function operation")
+ 
+    pred = activation_fn(pred)
+ 
+    N = gt.size(0)
+    pred_flat = pred.view(N, -1)
+    gt_flat = gt.view(N, -1)
+ 
+    intersection = (pred_flat * gt_flat).sum(1)
+    unionset = pred_flat.sum(1) + gt_flat.sum(1)
+    loss = (2 * intersection + smooth) / (unionset + smooth)
+ 
+    return loss.sum() / N
 
 class CrossEntropy2d(nn.Module):
 
@@ -66,7 +91,8 @@ class CrossEntropy2d(nn.Module):
         target = target[target_mask]
         predict = predict.transpose(1, 2).transpose(2, 3).contiguous()
         predict = predict[target_mask.view(n, h, w, 1).repeat(1, 1, 1, c)].view(-1, c)
-        loss = F.cross_entropy(predict, target, weight=weight, size_average=self.size_average)
+        #loss = F.cross_entropy(predict, target, weight=weight, size_average=self.size_average)
+        loss = 1 - diceCoeff(predict,target)
         return loss
 
 class IoULoss(torch.nn.Module):
@@ -201,7 +227,7 @@ def get_filenames_of_path(path: pathlib.Path, ext: str = '*'):
     filenames = [file for file in path.glob(ext) if file.is_file()]
     return filenames
 # input and target files
-inputs = get_filenames_of_path(root / 'lw_paths')
+inputs = get_filenames_of_path(root / '700hPa')
 targets = get_filenames_of_path(root / 'masks2')
 # training transformations and augmentations
 transforms_training = Compose([
@@ -277,10 +303,20 @@ model = UNet(n_classes=2, padding=True, up_mode='upsample')
 # criterion
 #criterion = torch.nn.CrossEntropyLoss()
 #criterion= IoULoss()
-criterion = CrossEntropy2d()
+#criterion = CrossEntropy2d()
+criterion = tgm.losses.DiceLoss()
 # optimizer
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.1,momentum = 0.9)
 # trainer
+
+
+
+#checkpoint = torch.load('/nobackup/mm16jdc/model_2021-04-29.pt')
+#model.load_state_dict(checkpoint['model_state_dict'])
+#optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+#epoch = checkpoint['epoch']
+#loss = checkpoint['loss']
+
 wandb.watch(model, log_freq=100)
 
 
@@ -296,15 +332,15 @@ trainer = Trainer(model=model,
                   notebook=False)
 # start training
 training_losses, validation_losses, lr_rates = trainer.run_trainer()
-
+now = time.strftime("%Y-%m-%d_%H", time.gmtime())
 load_path = '/nobackup/mm16jdc/' 
 
 torch.save({
-            'epoch': 10,
+            'epoch': 50,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
             'loss': [training_losses,validation_losses],
             'lr_rates':lr_rates
-            }, load_path+'model_2021-04-29.pt')
+            }, load_path+'model_'+now+'.pt')
 
-torch.save(model, load_path+'little_model_2021-04-30.pt')
+torch.save(model, load_path+'little_model_'+now+'.pt')
